@@ -24,7 +24,7 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Passou")
+	fmt.Println("Passou - ", c)
 
 	req.Header.Set("Content-type", "application/json")
 	req.Header.Set("Accept", "application/json")
