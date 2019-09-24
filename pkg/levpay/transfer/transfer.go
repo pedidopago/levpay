@@ -25,6 +25,7 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 	fmt.Println("Deu bom")
 	resp, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
+		fmt.Println("ENTROU AQUI - ", err)
 		return nil, err
 	}
 	fmt.Println("TT - ")
