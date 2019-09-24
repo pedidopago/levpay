@@ -23,7 +23,7 @@ func New(cfg *levpay.Config) *API {
 // which keys should be used for given domain
 func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, error) {
 	fmt.Println("Deu bom")
-	resp, err := api.Config.Do(http.MethodGet, "/cards", nil)
+	resp, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
 		return nil, err
 	}
