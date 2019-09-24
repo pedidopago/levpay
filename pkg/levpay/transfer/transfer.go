@@ -33,11 +33,13 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 	result := make([]levpay.BankAccount, 0)
 
 	if api.Config.Trace {
+		fmt.Println("AQui 1")
 		if err := ww.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
 			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
 			return nil, err
 		}
 	} else {
+		fmt.Println("AQui 2")
 		if err := ww.Unmarshal(resp, result); err != nil {
 			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
 			return nil, err
