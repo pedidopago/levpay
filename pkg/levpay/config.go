@@ -28,5 +28,6 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 	request.Header.Set("Accept", "application/json")
 	request.SetBasicAuth(c.ApiKey, c.SecretKey)
 
+	fmt.Println("passou 2")
 	return c.Client.Do(request)
 }
