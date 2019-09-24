@@ -1,6 +1,7 @@
 package transfer
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/pedidopago/levpay/internal/pkg/ww"
@@ -25,6 +26,7 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("TT - ")
 
 	result := make([]levpay.BankAccount, 0)
 
@@ -39,5 +41,6 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 			return nil, err
 		}
 	}
+	fmt.Println("resultado - ", result)
 	return result, nil
 }
