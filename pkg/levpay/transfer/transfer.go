@@ -28,7 +28,7 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 		fmt.Println("ENTROU AQUI - ", err)
 		return nil, err
 	}
-	fmt.Println("TT - ", resp)
+	fmt.Println("TT - ", resp.Body)
 
 	result := make([]levpay.BankAccount, 0)
 
