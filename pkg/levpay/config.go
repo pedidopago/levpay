@@ -18,11 +18,11 @@ type Config struct {
 }
 
 func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, error) {
-	fmt.Println("O que ta rolando")
 	request, err := http.NewRequest(method, "https://homolog.levpay.com/publicapi"+urlpart, body)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Passou")
 
 	request.Header.Set("Content-type", "application/json")
 	request.Header.Set("Accept", "application/json")
