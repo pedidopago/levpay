@@ -1,10 +1,11 @@
 package transfer
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
-	"github.com/pedidopago/levpay/internal/pkg/ww"
 	"github.com/pedidopago/levpay/pkg/levpay"
 )
 
@@ -23,28 +24,45 @@ func New(cfg *levpay.Config) *API {
 // which keys should be used for given domain
 func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, error) {
 	fmt.Println("Deu bom")
-	resp, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
+	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
-		fmt.Println("ENTROU AQUI - ", err)
+		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", domainID, err.Error())
 		return nil, err
 	}
-	fmt.Println("TT - ", resp.Body)
+	defer response.Body.Close()
 
-	result := make([]levpay.BankAccount, 0)
-
-	if api.Config.Trace {
-		fmt.Println("AQui 1")
-		if err := ww.UnmarshalTrace(api.Config.Logger, resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction: " + err.Error())
-			return nil, err
-		}
-	} else {
-		fmt.Println("AQui 2")
-		if err := ww.Unmarshal(resp, result); err != nil {
-			api.Config.Logger.Error("could not unmarshal transaction [Put]: " + err.Error())
-			return nil, err
-		}
+	responseBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e3", domainID, err.Error())
+		return nil, err
 	}
-	fmt.Println("resultado - ", result)
-	return result, nil
+
+	var accounts []levpay.BankAccount
+	var banks []levpay.LevpayBank
+	err = json.Unmarshal(responseBody, &banks)
+	if err != nil {
+		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e4", domainID, err.Error(), string(responseBody))
+		return nil, err
+	}
+	for index, bank := range banks {
+		var account levpay.BankAccount
+		account.ID = index + 1
+		account.DomainID = domainID
+		account.Name = bank.Name
+		account.IsPrimary = false
+		account.BankCode = bank.Slug
+		account.Agencia = bank.AccountAgency
+		account.AgenciaDv = ""
+		account.Conta = bank.AccountNumber
+		account.ContaDv = ""
+		account.DocumentType = "cnpj"
+		account.DocumentNumber = bank.AccountOwnerDocument
+		account.LegalName = bank.AccountOwner
+
+		accounts = append(accounts, account)
+	}
+
+	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", domainID, accounts)
+
+	return accounts, nil
 }
