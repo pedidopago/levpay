@@ -23,7 +23,6 @@ func New(cfg *levpay.Config) *API {
 // These accounts are fetched from Levpay endpoint using GetLevpayKeys to determine
 // which keys should be used for given domain
 func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, error) {
-	fmt.Println("Deu bom")
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
 		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", domainID, err.Error())
@@ -37,8 +36,6 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 		return nil, err
 	}
 
-	fmt.Println("RESPOSTA HEADER - ", response.Header)
-	fmt.Println("RESPOSTA BODY - ", response.Body)
 	var accounts []levpay.BankAccount
 	var banks []levpay.LevpayBank
 	err = json.Unmarshal(responseBody, &banks)
