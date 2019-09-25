@@ -37,6 +37,8 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 		return nil, err
 	}
 
+	fmt.Println("RESPOSTA HEADER - ", response.Header)
+	fmt.Println("RESPOSTA BODY - ", response.Body)
 	var accounts []levpay.BankAccount
 	var banks []levpay.LevpayBank
 	err = json.Unmarshal(responseBody, &banks)

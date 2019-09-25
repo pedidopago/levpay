@@ -39,11 +39,8 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 	}
 
 	bearer := "Bearer " + token.Token
-	fmt.Println("TESTE - ", bearer)
-	request.Header.Set("Authorization", bearer)
 	request.Header.Set("Content-type", "application/json")
-	request.Header.Set("Accept", "application/json")
-	request.SetBasicAuth(c.ApiKey, c.SecretKey)
+	request.Header.Set("Authorization", bearer)
 
 	if c.Trace {
 		buf := new(bytes.Buffer)
