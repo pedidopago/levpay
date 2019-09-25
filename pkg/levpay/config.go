@@ -101,6 +101,10 @@ func (c *Config) getLevpayAuthenticationToken() (LevpayToken, error) {
 	}
 
 	err = json.Unmarshal(responseBody, &token)
+	if err != nil {
+		fmt.Println("[LEVPAY] getLevpayAuthenticationToken e3", err.Error(), string(responseBody))
+		return token, err
+	}
 
 	return token, nil
 }
