@@ -39,6 +39,7 @@ func (c *Config) Do(method, urlpart string, body interface{}) (*http.Response, e
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("URL = ", baseURL+urlpart)
 
 	bearer := "Bearer " + token.Token
 	request.Header.Set("Content-type", "application/json")
