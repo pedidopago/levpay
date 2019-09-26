@@ -93,7 +93,9 @@ func (api *API) LevpayCreatePayment(domainID int, orderData levpay.LevpayOrderDa
 	return order, nil
 }
 
-func (api *API) LevPayOrderStatus(domainID int, UUID string) (levpay.LevpayOrderStatus, error) {
+// LevpayOrderStatus create a request to obtain a payment order status
+// containing order details about status and the uuid of order
+func (api *API) LevpayOrderStatus(domainID int, UUID string) (levpay.LevpayOrderStatus, error) {
 	var status levpay.LevpayOrderStatus
 
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/status/"+UUID, nil)
@@ -114,7 +116,6 @@ func (api *API) LevPayOrderStatus(domainID int, UUID string) (levpay.LevpayOrder
 		fmt.Println("[LEVPAY] CreateLevpayPayment e3", domainID, err.Error(), string(responseBody))
 		return status, err
 	}
-	fmt.Println("Resultado - ", status)
 
 	return status, nil
 }
