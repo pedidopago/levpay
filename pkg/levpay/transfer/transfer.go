@@ -19,10 +19,10 @@ func New(cfg *levpay.Config) *API {
 	}
 }
 
-// GetLevpayAvailableAccounts return an array of accounts available for the given domain.
+// LevpayAvailableAccounts return an array of accounts available for the given domain.
 // These accounts are fetched from Levpay endpoint using GetLevpayKeys to determine
 // which keys should be used for given domain
-func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, error) {
+func (api *API) LevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, error) {
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
 		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", domainID, err.Error())
@@ -66,9 +66,9 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 	return accounts, nil
 }
 
-// CreateLevpayPayment create a new payment at Levpay and return a LevpayOrder object
+// LevpayCreatePayment create a new payment at Levpay and return a LevpayOrder object
 // containing order details and the payment URL (if available)
-func (api *API) CreateLevpayPayment(domainID int, orderData levpay.LevpayOrderData) (levpay.LevpayOrder, error) {
+func (api *API) LevpayCreatePayment(domainID int, orderData levpay.LevpayOrderData) (levpay.LevpayOrder, error) {
 	var order levpay.LevpayOrder
 
 	response, err := api.Config.Do(http.MethodPost, "/instance/levpay/checkout/", orderData)
@@ -91,4 +91,28 @@ func (api *API) CreateLevpayPayment(domainID int, orderData levpay.LevpayOrderDa
 	}
 
 	return order, nil
+}
+
+func (api *API) LevPayOrderStatus(domainID int, UUID string) (result string, err error) {
+	response, err := api.Config.Do(http.MethodPost, "/instance/levpay/status/"+UUID, nil)
+	if err != nil {
+		fmt.Println("[LEVPAY] CreateLevpayPayment e1", domainID, err.Error())
+		return result, err
+	}
+	defer response.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("[LEVPAY] CreateLevpayPayment e2", domainID, err.Error())
+		return result, err
+	}
+
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		fmt.Println("[LEVPAY] CreateLevpayPayment e3", domainID, err.Error(), string(responseBody))
+		return result, err
+	}
+	fmt.Println("Resultado - ", result)
+
+	return result, nil
 }
