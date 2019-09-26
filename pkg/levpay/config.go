@@ -23,7 +23,7 @@ type Config struct {
 }
 
 // Do is a function to execute every api of levpay
-func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, error) {
+func (c *Config) Do(method, urlpart string, body interface{}) (*http.Response, error) {
 
 	// generate token
 	token, err := c.getLevpayAuthenticationToken()
@@ -32,8 +32,10 @@ func (c *Config) Do(method, urlpart string, body io.Reader) (*http.Response, err
 		return nil, err
 	}
 
+	dataBuffer := createRequestBody(body)
+
 	// execute main api
-	request, err := http.NewRequest(method, baseURL+urlpart, body)
+	request, err := http.NewRequest(method, baseURL+urlpart, dataBuffer)
 	if err != nil {
 		return nil, err
 	}
@@ -107,4 +109,12 @@ func (c *Config) getLevpayAuthenticationToken() (LevpayToken, error) {
 	}
 
 	return token, nil
+}
+
+// createRequestBody converts given interface as a Buffer for proper use on http.NewRequest
+func createRequestBody(data interface{}) *bytes.Buffer {
+	dataBuffer := new(bytes.Buffer)
+	json.NewEncoder(dataBuffer).Encode(data)
+
+	return dataBuffer
 }

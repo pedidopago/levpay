@@ -70,8 +70,9 @@ func (api *API) GetLevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, 
 // containing order details and the payment URL (if available)
 func (api *API) CreateLevpayPayment(domainID int, orderData levpay.LevpayOrderData) (levpay.LevpayOrder, error) {
 	var order levpay.LevpayOrder
+	fmt.Println("Chegou - ", orderData)
 
-	response, err := api.Config.Do(http.MethodPost, "/instance/levpay/checkout/", nil)
+	response, err := api.Config.Do(http.MethodPost, "/instance/levpay/checkout/", orderData)
 	if err != nil {
 		fmt.Println("[LEVPAY] CreateLevpayPayment e1", domainID, err.Error())
 		return order, err
