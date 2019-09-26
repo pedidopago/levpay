@@ -93,26 +93,28 @@ func (api *API) LevpayCreatePayment(domainID int, orderData levpay.LevpayOrderDa
 	return order, nil
 }
 
-func (api *API) LevPayOrderStatus(domainID int, UUID string) (result string, err error) {
+func (api *API) LevPayOrderStatus(domainID int, UUID string) (levpay.LevpayOrderStatus, error) {
+	var status levpay.LevpayOrderStatus
+
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/status/"+UUID, nil)
 	if err != nil {
 		fmt.Println("[LEVPAY] CreateLevpayPayment e1", domainID, err.Error())
-		return result, err
+		return status, err
 	}
 	defer response.Body.Close()
 
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		fmt.Println("[LEVPAY] CreateLevpayPayment e2", domainID, err.Error())
-		return result, err
+		return status, err
 	}
 
-	err = json.Unmarshal(responseBody, &result)
+	err = json.Unmarshal(responseBody, &status)
 	if err != nil {
 		fmt.Println("[LEVPAY] CreateLevpayPayment e3", domainID, err.Error(), string(responseBody))
-		return result, err
+		return status, err
 	}
-	fmt.Println("Resultado - ", result)
+	fmt.Println("Resultado - ", status)
 
-	return result, nil
+	return status, nil
 }

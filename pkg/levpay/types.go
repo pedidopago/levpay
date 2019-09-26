@@ -67,3 +67,8 @@ type LevpayOrder struct {
 	URL              string `db:"print_url" json:"url"`
 	UUID             string `db:"uuid" json:"uuid"`
 }
+
+type LevpayOrderStatus struct {
+	UUID   string `db:"uuid" json:"uuid"`
+	Status string `db:"status" json:"status"`
+}
