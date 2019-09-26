@@ -9,10 +9,12 @@ import (
 	"github.com/pedidopago/levpay/pkg/levpay"
 )
 
+// API struct contain levpay config
 type API struct {
 	Config *levpay.Config
 }
 
+// New start the instance of levpay api
 func New(cfg *levpay.Config) *API {
 	return &API{
 		Config: cfg,
