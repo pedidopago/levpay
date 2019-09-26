@@ -94,7 +94,7 @@ func (api *API) LevpayCreatePayment(domainID int, orderData levpay.LevpayOrderDa
 }
 
 func (api *API) LevPayOrderStatus(domainID int, UUID string) (result string, err error) {
-	response, err := api.Config.Do(http.MethodPost, "/instance/levpay/status/"+UUID, nil)
+	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/status/"+UUID, nil)
 	if err != nil {
 		fmt.Println("[LEVPAY] CreateLevpayPayment e1", domainID, err.Error())
 		return result, err
