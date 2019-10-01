@@ -20,11 +20,13 @@ type BankAccount struct {
 	CreatedAt      time.Time `db:"created" json:"-"`
 }
 
+// LevpayToken represents return of levpay tokens
 type LevpayToken struct {
 	Token     string `json:"token"`
 	TokenType string `json:"tokenType"`
 }
 
+// LevpayBank represents a return of levpay banks information
 type LevpayBank struct {
 	UUID                 string      `json:"uuid"`
 	Name                 string      `json:"name"`
@@ -66,4 +68,10 @@ type LevpayOrder struct {
 	PartnerReference string `db:"-" json:"partner_reference"`
 	URL              string `db:"print_url" json:"url"`
 	UUID             string `db:"uuid" json:"uuid"`
+}
+
+// LevpayOrderStatus represents a order status return
+type LevpayOrderStatus struct {
+	UUID   string `db:"uuid" json:"uuid"`
+	Status string `db:"status" json:"status"`
 }
