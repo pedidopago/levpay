@@ -5,19 +5,19 @@ import "time"
 // BankAccount represents a bank account item
 type BankAccount struct {
 	ID             int       `db:"id" json:"id"`
-	DomainID       int       `db:"domain_id" json:"domainID"`
+	CompanyID      string    `db:"company_id" json:"company_id"`
 	Name           string    `db:"name" json:"name"`
-	IsPrimary      bool      `db:"is_primary" json:"-"`
-	BankCode       string    `db:"bank_code" json:"codigo"`
-	Agencia        string    `db:"agencia" json:"ag"`
-	AgenciaDv      string    `db:"agencia_dv" json:"agDv"`
-	Conta          string    `db:"conta" json:"cc"`
-	ContaDv        string    `db:"conta_dv" json:"ccDv"`
+	IsPrimary      bool      `db:"is_primary" json:"is_primary"`
+	BankCode       string    `db:"bank_code" json:"bank_code"`
+	Agency         string    `db:"agency" json:"agency"`
+	AgencyDigit    string    `db:"agency_digit" json:"agency_digit"`
+	Account        string    `db:"account" json:"account"`
+	AccountDigit   string    `db:"account_digit" json:"account_digit"`
 	Type           int       `db:"type" json:"-"`
-	DocumentType   string    `db:"document_type" json:"-"`
-	DocumentNumber string    `db:"document_number" json:"cnpj"`
-	LegalName      string    `db:"legal_name" json:"beneficiario"`
-	CreatedAt      time.Time `db:"created" json:"-"`
+	DocumentType   string    `db:"document_type" json:"document_type"`
+	DocumentNumber string    `db:"document_number" json:"document_number"`
+	LegalName      string    `db:"legal_name" json:"legal_name"`
+	CreatedAt      time.Time `db:"created_at" json:"created_at"`
 }
 
 // LevpayToken represents return of levpay tokens
