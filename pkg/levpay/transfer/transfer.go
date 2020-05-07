@@ -24,17 +24,17 @@ func New(cfg *levpay.Config) *API {
 // LevpayAvailableAccounts return an array of accounts available for the given domain.
 // These accounts are fetched from Levpay endpoint using GetLevpayKeys to determine
 // which keys should be used for given domain
-func (api *API) LevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, error) {
+func (api *API) LevpayAvailableAccounts(companyID string) ([]levpay.BankAccount, error) {
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
-		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", domainID, err.Error())
+		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", companyID, err.Error())
 		return nil, err
 	}
 	defer response.Body.Close()
 
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e3", domainID, err.Error())
+		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e3", companyID, err.Error())
 		return nil, err
 	}
 
@@ -42,20 +42,20 @@ func (api *API) LevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, err
 	var banks []levpay.LevpayBank
 	err = json.Unmarshal(responseBody, &banks)
 	if err != nil {
-		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e4", domainID, err.Error(), string(responseBody))
+		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e4", companyID, err.Error(), string(responseBody))
 		return nil, err
 	}
 	for index, bank := range banks {
 		var account levpay.BankAccount
 		account.ID = index + 1
-		account.DomainID = domainID
+		account.CompanyID = companyID
 		account.Name = bank.Name
 		account.IsPrimary = false
 		account.BankCode = bank.Slug
-		account.Agencia = bank.AccountAgency
-		account.AgenciaDv = ""
-		account.Conta = bank.AccountNumber
-		account.ContaDv = ""
+		account.Agency = bank.AccountAgency
+		account.AgencyDigit = ""
+		account.Account = bank.AccountNumber
+		account.AccountDigit = ""
 		account.DocumentType = "cnpj"
 		account.DocumentNumber = bank.AccountOwnerDocument
 		account.LegalName = bank.AccountOwner
@@ -63,7 +63,7 @@ func (api *API) LevpayAvailableAccounts(domainID int) ([]levpay.BankAccount, err
 		accounts = append(accounts, account)
 	}
 
-	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", domainID, accounts)
+	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", companyID, accounts)
 
 	return accounts, nil
 }
