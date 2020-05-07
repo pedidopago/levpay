@@ -24,7 +24,7 @@ func New(cfg *levpay.Config) *API {
 // LevpayAvailableAccounts return an array of accounts available for the given domain.
 // These accounts are fetched from Levpay endpoint using GetLevpayKeys to determine
 // which keys should be used for given domain
-func (api *API) LevpayAvailableAccounts(companyID string) ([]*levpay.BankAccount, error) {
+func (api *API) LevpayAvailableAccounts(companyID string) ([]*levpay.LevpayBank, error) {
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
 		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", companyID, err.Error())
@@ -38,34 +38,34 @@ func (api *API) LevpayAvailableAccounts(companyID string) ([]*levpay.BankAccount
 		return nil, err
 	}
 
-	var accounts []*levpay.BankAccount
-	var banks []levpay.LevpayBank
+	// var accounts []*levpay.BankAccount
+	var banks []*levpay.LevpayBank
 	err = json.Unmarshal(responseBody, &banks)
 	if err != nil {
 		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e4", companyID, err.Error(), string(responseBody))
 		return nil, err
 	}
-	for index, bank := range banks {
-		var account levpay.BankAccount
-		account.ID = index + 1
-		account.CompanyID = companyID
-		account.Name = bank.Name
-		account.IsPrimary = false
-		account.BankCode = bank.Slug
-		account.Agency = bank.AccountAgency
-		account.AgencyDigit = ""
-		account.Account = bank.AccountNumber
-		account.AccountDigit = ""
-		account.DocumentType = "cnpj"
-		account.DocumentNumber = bank.AccountOwnerDocument
-		account.LegalName = bank.AccountOwner
+	// for index, bank := range banks {
+	// 	var account levpay.BankAccount
+	// 	account.ID = index + 1
+	// 	account.CompanyID = companyID
+	// 	account.Name = bank.Name
+	// 	account.IsPrimary = false
+	// 	account.BankCode = bank.Slug
+	// 	account.Agency = bank.AccountAgency
+	// 	account.AgencyDigit = ""
+	// 	account.Account = bank.AccountNumber
+	// 	account.AccountDigit = ""
+	// 	account.DocumentType = "cnpj"
+	// 	account.DocumentNumber = bank.AccountOwnerDocument
+	// 	account.LegalName = bank.AccountOwner
 
-		accounts = append(accounts, &account)
-	}
+	// 	accounts = append(accounts, &account)
+	// }
 
-	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", companyID, accounts)
+	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", companyID, banks)
 
-	return accounts, nil
+	return banks, nil
 }
 
 // LevpayCreatePayment create a new payment at Levpay and return a LevpayOrder object
