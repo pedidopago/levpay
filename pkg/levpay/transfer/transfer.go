@@ -24,7 +24,7 @@ func New(cfg *levpay.Config) *API {
 // LevpayAvailableAccounts return an array of accounts available for the given domain.
 // These accounts are fetched from Levpay endpoint using GetLevpayKeys to determine
 // which keys should be used for given domain
-func (api *API) LevpayAvailableAccounts(companyID string) ([]levpay.BankAccount, error) {
+func (api *API) LevpayAvailableAccounts(companyID string) ([]*levpay.BankAccount, error) {
 	response, err := api.Config.Do(http.MethodGet, "/instance/levpay/banks/", nil)
 	if err != nil {
 		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e2", companyID, err.Error())
@@ -38,7 +38,7 @@ func (api *API) LevpayAvailableAccounts(companyID string) ([]levpay.BankAccount,
 		return nil, err
 	}
 
-	var accounts []levpay.BankAccount
+	var accounts []*levpay.BankAccount
 	var banks []levpay.LevpayBank
 	err = json.Unmarshal(responseBody, &banks)
 	if err != nil {
@@ -60,7 +60,7 @@ func (api *API) LevpayAvailableAccounts(companyID string) ([]levpay.BankAccount,
 		account.DocumentNumber = bank.AccountOwnerDocument
 		account.LegalName = bank.AccountOwner
 
-		accounts = append(accounts, account)
+		accounts = append(accounts, &account)
 	}
 
 	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", companyID, accounts)
