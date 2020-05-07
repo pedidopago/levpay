@@ -38,32 +38,12 @@ func (api *API) LevpayAvailableAccounts(companyID string) ([]*levpay.LevpayBank,
 		return nil, err
 	}
 
-	// var accounts []*levpay.BankAccount
 	var banks []*levpay.LevpayBank
 	err = json.Unmarshal(responseBody, &banks)
 	if err != nil {
 		fmt.Println("[LEVPAY] GetLevpayAvailableAccounts e4", companyID, err.Error(), string(responseBody))
 		return nil, err
 	}
-	// for index, bank := range banks {
-	// 	var account levpay.BankAccount
-	// 	account.ID = index + 1
-	// 	account.CompanyID = companyID
-	// 	account.Name = bank.Name
-	// 	account.IsPrimary = false
-	// 	account.BankCode = bank.Slug
-	// 	account.Agency = bank.AccountAgency
-	// 	account.AgencyDigit = ""
-	// 	account.Account = bank.AccountNumber
-	// 	account.AccountDigit = ""
-	// 	account.DocumentType = "cnpj"
-	// 	account.DocumentNumber = bank.AccountOwnerDocument
-	// 	account.LegalName = bank.AccountOwner
-
-	// 	accounts = append(accounts, &account)
-	// }
-
-	fmt.Println("[LEVPAY] GetLevpayAvailableAccounts", companyID, banks)
 
 	return banks, nil
 }
